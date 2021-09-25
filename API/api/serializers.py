@@ -21,7 +21,7 @@ class MovieSerializer(serializers.ModelSerializer):
     movies = ReviewSerializer(many=True,read_only=True)
     class Meta:
         model= Movies
-        fields= ['id', 'title','movies','description','created','platform']
+        fields= ['id', 'title','movies','description','avg_review','no_of_reviews','created','platform']
     
     #  Validators that validate the data
     def validate(self,data):

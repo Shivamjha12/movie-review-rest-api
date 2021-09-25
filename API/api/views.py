@@ -23,13 +23,22 @@ class reviewsDetailsCreate(generics.CreateAPIView):
     def perform_create(self,serializer):
         pk = self.kwargs.get('pk')
         particular_movies_review = Movies.objects.get(pk=pk)
-        
 
         review_by_user = self.request.user
         review_queryset = Reviews.objects.filter(movies=particular_movies_review, review_by_user=review_by_user)
-
         if review_queryset.exists():
             raise ValidationError('Already reviewed this movie')
+
+        if particular_movies_review.no_of_reviews == 0:
+            particular_movies_review.avg_review = serializer.validated_data['ratings']
+        else:
+            particular_movies_review.avg_review = (particular_movies_review.avg_review + serializer.validated_data['ratings'])/2
+                # serializer.validated_data['ratings'])
+           
+
+        particular_movies_review.no_of_reviews = particular_movies_review.no_of_reviews + 1
+        particular_movies_review.save()
+
 
         serializer.save(movies=particular_movies_review,review_by_user=review_by_user)
 

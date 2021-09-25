@@ -19,6 +19,8 @@ class Movies(models.Model):
     platform = models.ForeignKey(StreamingPlatforms, on_delete=models.CASCADE,
     blank=True,default=None, null=True,related_name='Movies')
     active = models.BooleanField(default=False)
+    avg_review = models.FloatField(default=0)
+    no_of_reviews = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
