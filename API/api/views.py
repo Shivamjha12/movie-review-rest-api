@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 
 class reviewsDetailsCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsReviewUserOrReadOnly]
 
     def get_queryset(self):
         return Reviews.objects.all()
@@ -55,7 +56,7 @@ class reviewstList(generics.ListAPIView):
 class reviewsAll(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Reviews.objects.all()
-    permission_classes = [ReviewUserOrReadOnly]
+    # permission_classes = [IsReviewUserOrReadOnly]
     serializer_class = ReviewSerializer
 
     # def get_queryset(self):
