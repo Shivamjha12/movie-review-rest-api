@@ -12,6 +12,7 @@ from API.api.permissions import *
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 
 
 class reviewsDetailsCreate(generics.CreateAPIView):
@@ -146,6 +147,7 @@ class MovieListAV(APIView):
 
 class MovieDetailAV(APIView):
     permission_classes = [AdminOrReadOnly]
+    throttle_classes =[UserRateThrottle,AnonRateThrottle]
 
     def get(self, request,pk,*args, **kwargs):
         try:
