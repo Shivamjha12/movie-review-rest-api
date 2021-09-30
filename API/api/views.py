@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 from API.models import *
 from API.api.serializers import *
+from API.api.throttling import *
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
@@ -18,6 +19,7 @@ from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 class reviewsDetailsCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
+    throttle_classes =[ReviewCreateThrottle]
 
     def get_queryset(self):
         return Reviews.objects.all()
@@ -49,6 +51,7 @@ class reviewstList(generics.ListAPIView):
     # queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes =[ReviewListThrottle]
     # permission_classes = [IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -132,6 +135,8 @@ class StreamingPlatformsDetailview(APIView):
 
 class MovieListAV(APIView):
     permission_classes = [AdminOrReadOnly]
+    # throttle_classes =[UserRateThrottle,AnonRateThrottle]
+    throttle_classes =[ReviewListThrottle,AnonRateThrottle]
     def get(self, request, *args, **kwargs):
          movies = Movies.objects.all()
          x = MovieSerializer(movies,many=True)
