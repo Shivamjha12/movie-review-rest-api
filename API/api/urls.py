@@ -13,5 +13,5 @@ urlpatterns = [
         path('movies/<int:pk>/reviews/', views.reviewstList.as_view(), name='review-list'),
         path('movies/review/<int:pk>/', views.reviewsAll.as_view(), name='review-all'),
         path('movies/<int:pk>/reviews-create/', views.reviewsDetailsCreate.as_view(), name='review-list_detail_create'),
-
+        path('user/<str:username>/', views.UserReview_filter.as_view(),name='logout'),         
 ]

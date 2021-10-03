@@ -15,7 +15,13 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 
+class UserReview_filter(generics.ListAPIView):
+    serializer_class = ReviewSerializer
 
+    def get_queryset(self,*args, **kwargs):
+        username = self.kwargs['username']
+        search_username = Reviews.objects.filter(review_by_user__username=username)
+        return search_username
 class reviewsDetailsCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
