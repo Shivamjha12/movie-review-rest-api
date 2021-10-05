@@ -11,6 +11,7 @@ from API.api.permissions import *
 # from snippets.models import Snippet
 # from snippets.serializers import SnippetSerializer
 from rest_framework import mixins
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
@@ -18,10 +19,20 @@ from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 class UserReview_filter(generics.ListAPIView):
     serializer_class = ReviewSerializer
 
+    # def get_queryset(self,*args, **kwargs):
+    #     username = self.kwargs['username']
+    #     search_username = Reviews.objects.filter(review_by_user__username=username)
+    #     return search_username
+
     def get_queryset(self,*args, **kwargs):
-        username = self.kwargs['username']
-        search_username = Reviews.objects.filter(review_by_user__username=username)
-        return search_username
+        queryset = Reviews.objects.all()
+        username = self.request.query_params.get('username')
+        if username is not None:
+            queryset = queryset.filter(review_by_user__username=username)
+        return queryset
+        
+
+
 class reviewsDetailsCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
@@ -57,11 +68,25 @@ class reviewstList(generics.ListAPIView):
     # queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
-    throttle_classes =[ReviewListThrottle]
+    # throttle_classes =[ReviewListThrottle]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['description', 'review_by_user__username','active']
     # permission_classes = [IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Reviews.objects.filter(movies=pk)
+
+class movies(generics.ListAPIView):
+    queryset = Movies.objects.all()
+    serializer_class = MovieSerializer
+    # permission_classes = [IsAuthenticated]
+    # throttle_classes =[ReviewListThrottle]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'movies','avg_review','platform__name']
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    # def get_queryset(self):
+    #     pk = self.kwargs['pk']
+    #     return Reviews.objects.filter(movies=pk)
 
 class reviewsAll(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
