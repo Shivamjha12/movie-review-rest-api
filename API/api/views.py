@@ -12,6 +12,7 @@ from API.api.permissions import *
 # from snippets.serializers import SnippetSerializer
 from rest_framework import mixins
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
@@ -81,8 +82,12 @@ class movies(generics.ListAPIView):
     serializer_class = MovieSerializer
     # permission_classes = [IsAuthenticated]
     # throttle_classes =[ReviewListThrottle]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'movies','avg_review','platform__name']
+    # filter_backends = [DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_review']
+    # filterset_fields = ['title', 'movies','avg_review','platform__name']
+    search_fields   = ['^title','description',]
     # permission_classes = [IsAuthenticatedOrReadOnly]
     # def get_queryset(self):
     #     pk = self.kwargs['pk']
