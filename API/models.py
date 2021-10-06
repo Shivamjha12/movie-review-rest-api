@@ -16,8 +16,7 @@ class Movies(models.Model):
     # id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.TextField()
-    platform = models.ForeignKey(StreamingPlatforms, on_delete=models.CASCADE,
-    blank=True,default=None, null=True,related_name='Movies')
+    platform = models.ForeignKey(StreamingPlatforms, on_delete=models.CASCADE,blank=True,default=None, null=True,related_name='Movies')
     active = models.BooleanField(default=False)
     avg_review = models.FloatField(default=0)
     no_of_reviews = models.IntegerField(default=0)

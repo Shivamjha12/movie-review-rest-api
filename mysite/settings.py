@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',],
+        
         # 'rest_framework.authentication.SessionAuthentication',
     #     'DEFAULT_THROTTLE_CLASSES': [
     #     'rest_framework.throttling.AnonRateThrottle',
@@ -40,7 +41,9 @@ REST_FRAMEWORK = {
         'user': '5/day',
         'review-create': '3/day',
         'review-list':'10/day',
-    }
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
     
 }
 

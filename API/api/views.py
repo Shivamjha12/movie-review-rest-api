@@ -77,7 +77,7 @@ class reviewstList(generics.ListAPIView):
         pk = self.kwargs['pk']
         return Reviews.objects.filter(movies=pk)
 
-class movies(generics.ListAPIView):
+class movies_se(generics.ListAPIView):
     queryset = Movies.objects.all()
     serializer_class = MovieSerializer
     # permission_classes = [IsAuthenticated]

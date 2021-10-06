@@ -18,7 +18,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ('movies',)
 
 class MovieSerializer(serializers.ModelSerializer):
-    movies = ReviewSerializer(many=True,read_only=True)
+    # movies = ReviewSerializer(many=True,read_only=True)
+    # platform = serializers.CharField(source='platform.name')
     class Meta:
         model= Movies
         fields= ['id', 'title','movies','description','avg_review','no_of_reviews','created','platform']
